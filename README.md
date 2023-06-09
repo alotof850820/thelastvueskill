@@ -1,24 +1,23 @@
 # vue-first-app
 
-## Project setup
+## 目的
+
 ```
-npm install
+使用Vue3.0以上之語法搭配 Vuex vuecli 建構小型App
 ```
 
-### Compiles and hot-reloads for development
+### 描述
+
 ```
-npm run serve
+製作包含component pages route auth 及數據流動 和動畫
 ```
 
-### Compiles and minifies for production
-```
-npm run build
-```
+### 功能
 
-### Lints and fixes files
 ```
-npm run lint
+user 可以註冊(signup)後再登入系統，登入系統可以創立個人名牌，且可以接收來自不同user的信息
 ```
 
 ### Customize configuration
+
 See [Configuration Reference](https://cli.vuejs.org/config/).
