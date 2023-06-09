@@ -20,9 +20,7 @@ user 可以註冊(signup)後再登入系統，登入系統可以創立個人名�
 
 ### App 網址
 
-```
-https://newfriends.web.app/coaches
-```
+[Configuration Reference](https://newfriends.web.app/coaches)
 
 ### Customize configuration
 
