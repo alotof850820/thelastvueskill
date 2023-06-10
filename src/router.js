@@ -55,6 +55,7 @@ const route = createRouter({
   ],
 });
 
+//安全機制
 route.beforeEach((to, _, next) => {
   if (to.meta.requiresAuth && !store.getters.isAuth) {
     next('/auth');
