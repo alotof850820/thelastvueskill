@@ -21,7 +21,3 @@ user 可以註冊(signup)後再登入系統，登入系統可以創立個人名�
 ### App 網址
 
 [App web](https://newfriends.web.app/coaches)
-
-### Customize configuration
-
-See [Configuration Reference](https://cli.vuejs.org/config/).
