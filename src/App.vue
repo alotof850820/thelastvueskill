@@ -20,6 +20,7 @@ export default {
       return this.$store.getters.didAutoLogout;
     },
   },
+  //監視computed變化值,若有自動登出就跳轉到coaches頁面
   watch: {
     didAutoLogout(curState, oldState) {
       if (curState && curState !== oldState) {

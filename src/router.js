@@ -31,6 +31,7 @@ const route = createRouter({
       ],
     },
     {
+      // 使用 meta 属性可以为路由添加任意的自定义元数据
       path: '/auth',
       component: UserAuth,
       meta: {
