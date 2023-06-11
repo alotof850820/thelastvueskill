@@ -95,6 +95,7 @@ export const useCoachesStore = defineStore('coaches', () => {
     setCoaches(coaches);
     setFetchTimestamp(); //存時間點
   };
+
   return {
     coaches,
     lastFetch,
