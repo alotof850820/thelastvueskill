@@ -28,13 +28,14 @@
 </template>
 
 <script setup>
-import { defineProps, ref } from 'vue';
-import { computed } from '@vue/reactivity';
-import { useStore } from 'vuex';
-const store = useStore();
+import { defineProps, ref, computed } from 'vue';
+import { useCoachesStore } from '@/store/modules/coaches';
+
+const coachesStore = useCoachesStore();
 const props = defineProps(['id']);
 
 const selectedCoach = ref(null);
+
 const fullName = computed(() => {
   return `${selectedCoach.value.firstName} ${selectedCoach.value.lastName}`;
 });
@@ -51,39 +52,7 @@ const areas = computed(() => {
   return selectedCoach.value.areas;
 });
 
-selectedCoach.value = store.getters['coaches/coaches'].find(
+selectedCoach.value = coachesStore.getCoaches.find(
   (coach) => coach.id === props.id
 );
 </script>
-
-<!-- <script>
-export default {
-  //透過route將動態props傳進來
-  props: ['id'],
-  data() {
-    return { selectedCoach: null };
-  },
-  computed: {
-    fullName() {
-      return `${this.selectedCoach.firstName} ${this.selectedCoach.lastName}`;
-    },
-    contactLink() {
-      return `/coaches/${this.id}/contact`;
-    },
-    rates() {
-      return this.selectedCoach.hourlyRate;
-    },
-    description() {
-      return this.selectedCoach.description;
-    },
-    areas() {
-      return this.selectedCoach.areas;
-    },
-  },
-  created() {
-    this.selectedCoach = this.$store.getters['coaches/coaches'].find(
-      (coach) => coach.id === this.id
-    );
-  },
-};
-</script> -->

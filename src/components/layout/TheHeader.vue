@@ -21,36 +21,20 @@
 
 <script setup>
 import { computed } from 'vue';
-import { useStore } from 'vuex';
+import { useAuthStore } from '@/store/modules/auth';
 import { useRouter } from 'vue-router';
 
-const store = useStore();
+const authstore = useAuthStore();
 const router = useRouter();
 
 const isLoggedIn = computed(() => {
-  return store.getters.isAuth;
+  return authstore.isAuth;
 });
 const logout = () => {
-  store.dispatch('logout');
+  authstore.logout();
   router.replace('/coaches');
 };
 </script>
-
-<!-- <script>
-export default {
-  computed: {
-    isLoggedIn() {
-      return this.$store.getters.isAuth;
-    },
-  },
-  methods: {
-    logout() {
-      this.$store.dispatch('logout');
-      this.$router.replace('/coaches');
-    },
-  },
-};
-</script> -->
 
 <style scoped>
 header {

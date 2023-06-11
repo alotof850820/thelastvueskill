@@ -8,27 +8,28 @@
   </RouterView>
 </template>
 
-<script>
+<script setup>
 import TheHeader from './components/layout/TheHeader.vue';
-export default {
-  components: { TheHeader },
-  created() {
-    this.$store.dispatch('autoLogin');
-  },
-  computed: {
-    didAutoLogout() {
-      return this.$store.getters.didAutoLogout;
-    },
-  },
-  //監視computed變化值,若有自動登出就跳轉到coaches頁面
-  watch: {
-    didAutoLogout(curState, oldState) {
-      if (curState && curState !== oldState) {
-        this.$router.replace('/coaches');
-      }
-    },
-  },
-};
+import { useAuthStore } from '@/store/modules/auth';
+import { useRouter } from 'vue-router';
+import { computed, watch } from 'vue';
+
+const authStore = useAuthStore();
+const router = useRouter();
+
+const didAutoLogout = computed(() => {
+  return authStore.didAutoLogout;
+});
+
+//監視computed變化值,若有自動登出就跳轉到coaches頁面
+
+watch(didAutoLogout, (curState, oldState) => {
+  if (curState && curState !== oldState) {
+    router.replace('/coaches');
+  }
+});
+
+authStore.autoLogin();
 </script>
 
 <style>

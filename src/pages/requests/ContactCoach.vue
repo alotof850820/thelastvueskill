@@ -28,11 +28,12 @@
 <script setup>
 import { ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { useStore } from 'vuex';
+import { useRequestsStore } from '@/store/modules/requests';
 
 const router = useRouter();
 const route = useRoute();
-const store = useStore();
+const requestsStore = useRequestsStore();
+
 const email = ref('');
 const message = ref('');
 const formIsValid = ref(true);
@@ -40,7 +41,6 @@ const formIsValid = ref(true);
 const clear = () => {
   formIsValid.value = true;
 };
-
 const submitForm = () => {
   formIsValid.value = true;
   if (
@@ -52,7 +52,7 @@ const submitForm = () => {
     return;
   }
   //傳data給request page
-  store.dispatch('requests/contactCoach', {
+  requestsStore.contactCoach({
     coachId: route.params.id,
     email: email.value,
     message: message.value,
@@ -60,41 +60,6 @@ const submitForm = () => {
   router.replace('/coaches');
 };
 </script>
-
-<!-- <script>
-export default {
-  data() {
-    return {
-      email: '',
-      message: '',
-      formIsValid: true,
-    };
-  },
-  methods: {
-    clear() {
-      this.formIsValid = true;
-    },
-    submitForm() {
-      this.formIsValid = true;
-      if (
-        this.email === '' ||
-        this.message === '' ||
-        !this.email.includes('@')
-      ) {
-        this.formIsValid = false;
-        return;
-      }
-      //傳data給request page
-      this.$store.dispatch('requests/contactCoach', {
-        coachId: this.$route.params.id,
-        email: this.email,
-        message: this.message,
-      });
-      this.$router.replace('/coaches');
-    },
-  },
-};
-</script> -->
 
 <style scoped>
 form {

@@ -7,29 +7,28 @@
   </RouterLink>
 </template>
 
-<script>
-export default {
-  //在使用的component添加以下props調控style
-  props: {
-    //mode在需使用時輸入flat outline操控style
-    mode: {
-      type: String,
-      required: false,
-      default: null,
-    },
-    //有link則判斷是 routerlink
-    link: {
-      type: Boolean,
-      required: false,
-      default: false,
-    },
-    to: {
-      type: String,
-      required: false,
-      default: '/',
-    },
+<script setup>
+import { defineProps } from 'vue';
+
+//在使用的component添加以下props調控style
+defineProps({
+  //mode在需使用時輸入flat outline操控style
+  mode: {
+    type: String,
+    required: false,
+    default: null,
+  }, //有link則判斷是 routerlink
+  link: {
+    type: Boolean,
+    required: false,
+    default: false,
   },
-};
+  to: {
+    type: String,
+    required: false,
+    default: '/',
+  },
+});
 </script>
 
 <style scoped>

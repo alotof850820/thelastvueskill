@@ -31,74 +31,34 @@
 import RequestsItem from '../../components/requests/RequestsItem.vue';
 import { ref } from 'vue';
 import { computed } from '@vue/reactivity';
-import { useStore } from 'vuex';
+import { useRequestsStore } from '@/store/modules/requests';
 
-const store = useStore();
+const requestsStore = useRequestsStore();
 
 const isLoading = ref(false);
 const error = ref(null);
+
 const receivedRequests = computed(() => {
-  return store.getters['requests/requests'];
+  return requestsStore.requests;
 });
 const hasRequests = computed(() => {
-  return store.getters['requests/hasRequests'];
+  return requestsStore.hasRequests;
 });
+
 const loadRequests = async () => {
   isLoading.value = true;
   try {
-    await store.dispatch('requests/fetchRequests');
+    await requestsStore.fetchRequests();
   } catch (error) {
     error.value = error.message || 'somthing failed';
   }
-
   isLoading.value = false;
 };
 const handleError = () => {
   error.value = null;
 };
-
 loadRequests();
 </script>
-
-<!-- <script>
-import RequestsItem from '../../components/requests/RequestsItem.vue';
-
-export default {
-  data() {
-    return {
-      isLoading: false,
-      error: null,
-    };
-  },
-  components: { RequestsItem },
-  computed: {
-    receivedRequests() {
-      return this.$store.getters['requests/requests'];
-    },
-    hasRequests() {
-      return this.$store.getters['requests/hasRequests'];
-    },
-  },
-  methods: {
-    async loadRequests() {
-      this.isLoading = true;
-      try {
-        await this.$store.dispatch('requests/fetchRequests');
-      } catch (error) {
-        this.error = error.message || 'somthing failed';
-      }
-
-      this.isLoading = false;
-    },
-    handleError() {
-      this.error = null;
-    },
-  },
-  created() {
-    this.loadRequests();
-  },
-};
-</script> -->
 
 <style scoped>
 header {

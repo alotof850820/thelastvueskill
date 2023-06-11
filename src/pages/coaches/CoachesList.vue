@@ -1,77 +1,3 @@
-<!-- <script>
-import CoachItem from '../../components/coaches/CoachItem.vue';
-import CoachFilter from '../../components/coaches/CoachFilter.vue';
-
-export default {
-  data() {
-    return {
-      isLoading: false,
-      error: null,
-
-      activeFilter: {
-        frontend: true,
-        backend: true,
-        career: true,
-      },
-    };
-  },
-  components: { CoachItem, CoachFilter },
-  computed: {
-    isLoggedIn() {
-      return this.$store.getters.isAuth;
-    },
-    filterCoaches() {
-      const coaches = this.$store.getters['coaches/coaches'];
-      return coaches.filter((coach) => {
-        if (this.activeFilter.frontend && coach.areas.includes('frontend')) {
-          return true;
-        }
-        if (this.activeFilter.backend && coach.areas.includes('backend')) {
-          return true;
-        }
-        if (this.activeFilter.career && coach.areas.includes('career')) {
-          return true;
-        }
-        return false;
-      });
-    },
-
-    hasCoaches() {
-      //檢查
-      return !this.isLoading && this.$store.getters['coaches/hasCoaches'];
-    },
-    isCoach() {
-      return this.$store.getters['coaches/isCoach'];
-    },
-  },
-  methods: {
-    setFilters(updatedFilter) {
-      //activeFilter與子component updatedFilter狀態保持一致
-      this.activeFilter = updatedFilter;
-    },
-    async loadCoaches(hasRefresh = false) {
-      this.isLoading = true;
-      //等待fetch完成
-      try {
-        await this.$store.dispatch('coaches/loadCoaches', {
-          hasRefresh: hasRefresh,
-        });
-      } catch (error) {
-        this.error = error.message || 'something wrong';
-      }
-
-      this.isLoading = false;
-    },
-    handleError() {
-      this.error = null;
-    },
-  },
-  created() {
-    this.loadCoaches();
-  },
-};
-</script> -->
-
 <template>
   <div>
     <BaseDialog :show="!!error" title="errorrrr!!!!" @close="handleError">
@@ -123,11 +49,13 @@ export default {
 
 <script setup>
 import { ref, reactive, computed } from 'vue';
-import { useStore } from 'vuex';
 import CoachItem from '../../components/coaches/CoachItem.vue';
 import CoachFilter from '../../components/coaches/CoachFilter.vue';
+import { useCoachesStore } from '@/store/modules/coaches';
+import { useAuthStore } from '@/store/modules/auth';
 
-const store = useStore();
+const coachesStore = useCoachesStore();
+const authStore = useAuthStore();
 
 const isLoading = ref(false);
 const error = ref(null);
@@ -138,11 +66,10 @@ const activeFilter = reactive({
 });
 
 const isLoggedIn = computed(() => {
-  return store.getters.isAuth;
+  return authStore.isAuth;
 });
-
 const filterCoaches = computed(() => {
-  const coaches = store.getters['coaches/coaches'];
+  const coaches = coachesStore.getCoaches;
   return coaches.filter((coach) => {
     if (activeFilter.frontend && coach.areas.includes('frontend')) {
       return true;
@@ -156,13 +83,11 @@ const filterCoaches = computed(() => {
     return false;
   });
 });
-
 const hasCoaches = computed(() => {
-  return !isLoading.value && store.getters['coaches/hasCoaches'];
+  return !isLoading.value && coachesStore.hasCoaches;
 });
-
 const isCoach = computed(() => {
-  return store.getters['coaches/isCoach'];
+  return coachesStore.isCoach;
 });
 
 const setFilters = (updatedFilter) => {
@@ -170,11 +95,10 @@ const setFilters = (updatedFilter) => {
   activeFilter.backend = updatedFilter.backend;
   activeFilter.career = updatedFilter.career;
 };
-
 const loadCoaches = async (hasRefresh = false) => {
   isLoading.value = true;
   try {
-    await store.dispatch('coaches/loadCoaches', {
+    await coachesStore.loadCoaches({
       hasRefresh: hasRefresh,
     });
   } catch (e) {
@@ -182,164 +106,11 @@ const loadCoaches = async (hasRefresh = false) => {
   }
   isLoading.value = false;
 };
-
 const handleError = () => {
   error.value = null;
 };
-
 loadCoaches();
 </script>
-
-<!-- <script>
-import { ref, reactive, computed } from 'vue';
-import { useStore } from 'vuex';
-import CoachItem from '../../components/coaches/CoachItem.vue';
-import CoachFilter from '../../components/coaches/CoachFilter.vue';
-
-export default {
-  components: {
-    CoachItem,
-    CoachFilter,
-  },
-  setup() {
-    const store = useStore();
-
-    const isLoading = ref(false);
-    const error = ref(null);
-    const activeFilter = reactive({
-      frontend: true,
-      backend: true,
-      career: true,
-    });
-
-    const isLoggedIn = computed(() => {
-      return store.getters.isAuth;
-    });
-
-    const filterCoaches = computed(() => {
-      const coaches = store.getters['coaches/coaches'];
-      return coaches.filter((coach) => {
-        if (activeFilter.frontend && coach.areas.includes('frontend')) {
-          return true;
-        }
-        if (activeFilter.backend && coach.areas.includes('backend')) {
-          return true;
-        }
-        if (activeFilter.career && coach.areas.includes('career')) {
-          return true;
-        }
-        return false;
-      });
-    });
-
-    const hasCoaches = computed(() => {
-      return !isLoading.value && store.getters['coaches/hasCoaches'];
-    });
-
-    const isCoach = computed(() => {
-      return store.getters['coaches/isCoach'];
-    });
-
-    const setFilters = (updatedFilter) => {
-      activeFilter.frontend = updatedFilter.frontend;
-      activeFilter.backend = updatedFilter.backend;
-      activeFilter.career = updatedFilter.career;
-    };
-
-    const loadCoaches = async (hasRefresh = false) => {
-      isLoading.value = true;
-      try {
-        await store.dispatch('coaches/loadCoaches', {
-          hasRefresh: hasRefresh,
-        });
-      } catch (e) {
-        error.value = e.message || 'something wrong';
-      }
-      isLoading.value = false;
-    };
-
-    const handleError = () => {
-      error.value = null;
-    };
-
-    return {
-      isLoading,
-      error,
-      activeFilter,
-      isLoggedIn,
-      filterCoaches,
-      hasCoaches,
-      isCoach,
-      setFilters,
-      loadCoaches,
-      handleError,
-    };
-  },
-};
-</script> -->
-
-<!-- <script setup>
-import CoachItem from '../../components/coaches/CoachItem.vue';
-import CoachFilter from '../../components/coaches/CoachFilter.vue';
-import { ref, reactive, computed } from 'vue';
-import { useStore } from 'vuex';
-
-const store = useStore;
-
-const isLoading = ref(false);
-const error = ref(null);
-const activeFilter = reactive({ frontend: true, backend: true, career: true });
-const isLoggedIn = computed(() => {
-  return store.getters.isAuth;
-});
-const filterCoaches = computed(() => {
-  const coaches = store.getters['coaches/coaches'];
-  return coaches.filter((coach) => {
-    if (activeFilter.value.frontend && coach.areas.includes('frontend')) {
-      return true;
-    }
-    if (activeFilter.value.backend && coach.areas.includes('backend')) {
-      return true;
-    }
-    if (activeFilter.value.career && coach.areas.includes('career')) {
-      return true;
-    }
-    return false;
-  });
-});
-
-const hasCoaches = computed(() => {
-  //檢查
-  return !isLoading.value && store.getters['coaches/hasCoaches'];
-});
-
-const isCoach = computed(() => {
-  return store.getters['coaches/isCoach'];
-});
-
-const setFilters = (updatedFilter) => {
-  //activeFilter與子component updatedFilter狀態保持一致
-  activeFilter.value = updatedFilter;
-};
-
-const loadCoaches = async (hasRefresh = false) => {
-  isLoading.value = true;
-  //等待fetch完成
-  try {
-    await store.dispatch('coaches/loadCoaches', {
-      hasRefresh: hasRefresh,
-    });
-  } catch (e) {
-    error.value = e.message || 'something wrong';
-  }
-
-  isLoading.value = false;
-};
-
-const handleError = () => {
-  error.value = null;
-};
-</script> -->
 
 <style scoped>
 ul {

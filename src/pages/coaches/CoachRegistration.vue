@@ -11,29 +11,14 @@
 
 <script setup>
 import CoachForm from '../../components/coaches/CoachForm.vue';
-import { useStore } from 'vuex';
+import { useCoachesStore } from '@/store/modules/coaches';
 import { useRouter } from 'vue-router';
-const store = useStore();
+const coachesStore = useCoachesStore();
 const router = useRouter();
 
 const formData = (formDate) => {
   //將新data加入vuex store，用action
-  store.dispatch('coaches/registerCoach', formDate);
+  coachesStore.registerCoach(formDate);
   router.replace('/coaches');
 };
 </script>
-
-<!-- <script>
-import CoachForm from '../../components/coaches/CoachForm.vue';
-
-export default {
-  components: { CoachForm },
-  methods: {
-    formData(formDate) {
-      //將新data加入vuex store，用action
-      this.$store.dispatch('coaches/registerCoach', formDate);
-      this.$router.replace('/coaches');
-    },
-  },
-};
-</script> -->

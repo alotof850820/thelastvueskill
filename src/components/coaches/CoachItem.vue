@@ -23,39 +23,16 @@ const props = defineProps(['id', 'firstName', 'lastName', 'rate', 'areas']);
 const fullName = computed(() => {
   return `${props.firstName} ${props.lastName}`;
 });
-
 const coachContactLink = computed(() => {
   return `${route.path}/${props.id}/contact`;
 });
-
 const coachDetailsLink = computed(() => {
   return `${route.path}/${props.id}`;
 });
-
 const rates = computed(() => {
   return props.rate;
 });
 </script>
-
-<!-- <script>
-export default {
-  props: ['id', 'firstName', 'lastName', 'rate', 'areas'],
-  computed: {
-    fullName() {
-      return `${this.firstName} ${this.lastName}`;
-    },
-    coachContactLink() {
-      return `${this.$route.path}/${this.id}/contact`;
-    },
-    coachDetailsLink() {
-      return `${this.$route.path}/${this.id}`;
-    },
-    rates() {
-      return this.rate;
-    },
-  },
-};
-</script> -->
 
 <style scoped>
 li {

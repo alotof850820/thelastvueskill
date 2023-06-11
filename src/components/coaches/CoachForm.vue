@@ -74,7 +74,7 @@
       </div>
       <p v-if="!areas.isValid">請選擇一個專長</p>
     </div>
-    <p v-if="!formIsVaild">請正確填寫表單!</p>
+    <p v-if="!formIsValid">請正確填寫表單!</p>
     <BaseButton>註冊</BaseButton>
   </form>
 </template>
@@ -85,37 +85,32 @@ import { useRouter } from 'vue-router';
 
 const emit = defineEmits(['formData']);
 const router = useRouter();
+
 const firstName = reactive({
   val: '',
   isValid: true,
 });
-
 const lastName = reactive({
   val: '',
   isValid: true,
 });
-
 const description = reactive({
   val: '',
   isValid: true,
 });
-
 const rate = reactive({
   val: null,
   isValid: true,
 });
-
 const areas = reactive({
   val: [],
   isValid: true,
 });
-
 const formIsValid = ref(true);
 
 const clearValidity = (input) => {
   input.isValid = true;
 };
-
 const validateForm = () => {
   formIsValid.value = true;
 
@@ -140,7 +135,6 @@ const validateForm = () => {
     formIsValid.value = false;
   }
 };
-
 const submitForm = () => {
   validateForm();
   if (!formIsValid.value) {
@@ -153,84 +147,10 @@ const submitForm = () => {
     rate: rate.val,
     areas: areas.val,
   };
-
   emit('formData', formData);
   router.replace('/');
 };
 </script>
-
-<!-- <script>
-export default {
-  emits: ['formDate'],
-  data() {
-    return {
-      firstName: {
-        val: '',
-        isValid: true,
-      },
-      lastName: {
-        val: '',
-        isValid: true,
-      },
-      description: {
-        val: '',
-        isValid: true,
-      },
-      rate: {
-        val: null,
-        isValid: true,
-      },
-      areas: {
-        val: [],
-        isValid: true,
-      },
-      formIsVaild: true,
-    };
-  },
-  methods: {
-    clearValidity(input) {
-      this[input].isValid = true;
-    },
-    validateForm() {
-      this.formIsVaild = true;
-      if (this.firstName.val === '') {
-        this.firstName.isValid = false;
-        this.formIsVaild = false;
-      }
-      if (this.lastName.val === '') {
-        this.lastName.isValid = false;
-        this.formIsVaild = false;
-      }
-      if (this.description.val === '') {
-        this.description.isValid = false;
-        this.formIsVaild = false;
-      }
-      if (!this.rate.val || this.rate.val < 0) {
-        this.rate.isValid = false;
-        this.formIsVaild = false;
-      }
-      if (this.areas.val.length === 0) {
-        this.areas.isValid = false;
-        this.formIsVaild = false;
-      }
-    },
-    submitForm() {
-      this.validateForm();
-      if (!this.formIsVaild) {
-        return;
-      }
-      const formData = {
-        first: this.firstName.val,
-        last: this.lastName.val,
-        desc: this.description.val,
-        rate: this.rate.val,
-        areas: this.areas.val,
-      };
-      this.$emit('formDate', formData);
-    },
-  },
-};
-</script> -->
 
 <style scoped>
 .form-control {

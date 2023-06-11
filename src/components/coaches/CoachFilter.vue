@@ -21,32 +21,9 @@
   </BaseCard>
 </template>
 
-<!-- <script>
-export default {
-  emit: ['changeFilter'],
-  data() {
-    return {
-      filters: { frontend: true, backend: true, career: true },
-    };
-  },
-  methods: {
-    setFilter(e) {
-      const inputId = e.target.id;
-      const isChecked = e.target.checked;
-      const updatedFilter = {
-        ...this.filters,
-        [inputId]: isChecked,
-      };
-      this.filters = updatedFilter;
-      //將新結果上傳至list使用呈現
-      this.$emit('changeFilter', updatedFilter);
-    },
-  },
-};
-</script> -->
-
 <script setup>
 import { defineEmits, reactive } from 'vue';
+
 const emit = defineEmits(['changeFilter']);
 
 const filters = reactive({ frontend: true, backend: true, career: true });

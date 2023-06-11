@@ -32,9 +32,11 @@
 
 <script setup>
 import { ref } from 'vue';
-import { useStore } from 'vuex';
+import { useAuthStore } from '@/store/modules/auth';
 import { computed } from '@vue/reactivity';
 import { useRoute, useRouter } from 'vue-router';
+
+const authStore = useAuthStore();
 
 const email = ref('');
 const password = ref('');
@@ -45,8 +47,6 @@ const error = ref(null);
 const route = useRoute();
 const router = useRouter();
 
-const store = useStore();
-
 const submitButtonCaption = computed(() => {
   if (mode.value === 'Login') {
     return 'Login';
@@ -54,7 +54,6 @@ const submitButtonCaption = computed(() => {
     return 'Signup';
   }
 });
-
 const switchModeButtonCation = computed(() => {
   if (mode.value === 'Signup') {
     return 'Signup instead';
@@ -65,7 +64,6 @@ const switchModeButtonCation = computed(() => {
 
 const submitForm = async () => {
   formIsValid.value = true;
-
   if (
     !email.value.includes('@') ||
     email.value === '' ||
@@ -74,30 +72,24 @@ const submitForm = async () => {
     formIsValid.value = false;
     return;
   }
-
   isLoading.value = true;
-
   const actionPayload = {
     email: email.value,
     password: password.value,
   };
-
   try {
     if (mode.value === 'Login') {
-      await store.dispatch('login', actionPayload);
+      await authStore.login(actionPayload);
     } else {
-      await store.dispatch('signup', actionPayload);
+      await authStore.signup(actionPayload);
     }
-
     const redirectUrl = '/' + (route.query.redirect || 'coaches');
     router.replace(redirectUrl);
   } catch (error) {
     error.value = error.message || 'failed to auth!!!!';
   }
-
   isLoading.value = false;
 };
-
 const switchAuthMode = () => {
   if (mode.value === 'Login') {
     mode.value = 'Signup';
@@ -105,86 +97,10 @@ const switchAuthMode = () => {
     mode.value = 'Login';
   }
 };
-
 const handleError = () => {
   error.value = null;
 };
 </script>
-
-<!-- <script>
-export default {
-  data() {
-    return {
-      email: '',
-      password: '',
-      formIsValid: true,
-      // 註冊和登入mode 切換
-      mode: 'Login',
-      isLoading: false,
-      error: null,
-    };
-  },
-  computed: {
-    submitButtonCaption() {
-      if (this.mode === 'Login') {
-        return 'Login';
-      } else {
-        return 'Signup';
-      }
-    },
-    switchModeButtonCation() {
-      if (this.mode === 'Signup') {
-        return 'Signup instead';
-      } else {
-        return 'Login instead';
-      }
-    },
-  },
-  methods: {
-    async submitForm() {
-      this.formIsValid = true;
-      if (
-        !this.email.includes('@') ||
-        this.email === '' ||
-        this.password.length < 6
-      ) {
-        this.formIsValid = false;
-        return;
-      }
-
-      this.isLoading = true;
-
-      const actionPayload = {
-        email: this.email,
-        password: this.password,
-      };
-      //send http 登入
-      try {
-        if (this.mode === 'Login') {
-          await this.$store.dispatch('login', actionPayload);
-        } else {
-          await this.$store.dispatch('signup', actionPayload);
-        }
-        const redirectUrl = '/' + (this.$route.query.redirect || 'coaches');
-        this.$router.replace(redirectUrl);
-      } catch (error) {
-        this.error = error.message || 'failed to auth!!!!';
-      }
-      this.isLoading = false;
-    },
-    switchAuthMode() {
-      if (this.mode === 'Login') {
-        this.mode = 'Signup';
-      } else {
-        this.mode = 'Login';
-      }
-    },
-    handleError() {
-      this.error = null;
-    },
-  },
-};
-</script> -->
 
 <style scoped>
 form {

@@ -1,12 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
-// import CoachDetails from './pages/coaches/CoachDetails';
 import CoachesList from './pages/coaches/CoachesList.vue';
-// import CoachRegistration from './pages/coaches/CoachRegistration.vue';
-// import ContactCoach from './pages/requests/ContactCoach.vue';
-// import RequestsRecive from './pages/requests/RequestsRecive.vue';
 import NotFound from './pages/NotFound.vue';
-// import UserAuth from '../src/pages/auth/UserAuth.vue';
-import store from './store';
+import { useAuthStore } from './store/modules/auth';
 
 const CoachDetails = () => import('./pages/coaches/CoachDetails');
 const CoachRegistration = () => import('./pages/coaches/CoachRegistration.vue');
@@ -58,9 +53,10 @@ const route = createRouter({
 
 //安全機制
 route.beforeEach((to, _, next) => {
-  if (to.meta.requiresAuth && !store.getters.isAuth) {
+  const authStore = useAuthStore();
+  if (to.meta.requiresAuth && !authStore.isAuth) {
     next('/auth');
-  } else if (to.meta.requiresUnAuth && store.getters.isAuth) {
+  } else if (to.meta.requiresUnAuth && authStore.isAuth) {
     next('/coaches');
   } else {
     next();
